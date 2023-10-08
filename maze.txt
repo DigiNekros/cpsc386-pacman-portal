@@ -1,0 +1,51 @@
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+X                         XXX                         X
+X p p p p p p p p p p p p XXX p p p p p p p p p p p p X
+X                         XXX                         X
+X p XXXXXXX p XXXXXXXXX p XXX p XXXXXXXXX p XXXXXXX p X
+X o XXXXXXX p XXXXXXXXX p XXX p XXXXXXXXX p XXXXXXX o X
+X p XXXXXXX p XXXXXXXXX p XXX p XXXXXXXXX p XXXXXXX p X
+X                                                     X
+X p p p p p p p p p p p p p p p p p p p p p p p p p p X
+X                                                     X
+X p XXXXXXX p XXX p XXXXXXXXXXXXXXX p XXX p XXXXXXX p X
+X p XXXXXXX p XXX p XXXXXXXXXXXXXXX p XXX p XXXXXXX p X
+X             XXX         XXX         XXX             X
+X p p p p p p XXX p p p p XXX p p p p XXX p p p p p p X
+X             XXX         XXX         XXX             X
+XXXXXXXXXXX p XXXXXXXXX   XXX   XXXXXXXXX p XXXXXXXXXXX
+          X p XXXXXXXXX   XXX   XXXXXXXXX p X
+          X p XXX                     XXX p X
+          X p XXX                     XXX p X
+          X p XXX                     XXX p X
+          X p XXX    XXXXsssssXXXX    XXX p X
+XXXXXXXXXXX p XXX    X           X    XXX p XXXXXXXXXXX
+X           p        X           X        p           X
+X           p        X           X        p           X
+X           p        X           X        p           X
+XXXXXXXXXXX p XXX    X           X    XXX p XXXXXXXXXXX
+          X p XXX    XXXXXXXXXXXXX    XXX p X
+          X p XXX                     XXX p X
+          X p XXX                     XXX p X
+          X p XXX                     XXX p X
+          X p XXX   XXXXXXXXXXXXXXX   XXX p X
+XXXXXXXXXXX p XXX   XXXXXXXXXXXXXXX   XXX p XXXXXXXXXXX
+X                         XXX                         X
+X p p p p p p p p p p p p XXX p p p p p p p p p p p p X
+X                         XXX                         X
+X p XXXXXXX p XXXXXXXXX p XXX p XXXXXXXXX p XXXXXXX p X
+X p XXXXXXX p XXXXXXXXX p XXX p XXXXXXXXX p XXXXXXX p X
+X p     XXX p                             p XXX     p X
+X o p p XXX p p p p p p p pSp p p p p p p p XXX p p o X
+X       XXX p                             p XXX       X
+XXXXX p XXX p XXX p XXXXXXXXXXXXXXX p XXX p XXX p XXXXX
+XXXXX p XXX p XXX p XXXXXXXXXXXXXXX p XXX p XXX p XXXXX
+X             XXX         XXX         XXX             X
+X p p p p p p XXX p p p p XXX p p p p XXX p p p p p p X
+X             XXX         XXX         XXX             X
+X p XXXXXXXXXXXXXXXXXXX p XXX p XXXXXXXXXXXXXXXXXXX p X
+X p XXXXXXXXXXXXXXXXXXX p XXX p XXXXXXXXXXXXXXXXXXX p X
+X                                                     X
+X p p p p p p p p p p p p p p p p p p p p p p p p p p X
+X                                                     X
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

@@ -1,0 +1,54 @@
+ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+ X                     XX                     X  p=point
+ X vpppppppvpppppppppv XX vpppppppppvpppppppv X  o=powerpill
+ X                     XX                     X  v=graph vertex
+ X p XXXXX p XXXXXXX p XX p XXXXXXX p XXXXX p X  s=shield
+ X o XXXXX p XXXXXXX p XX p XXXXXXX p XXXXX o X  x=wall/barrier
+ X p XXXXX p XXXXXXX p XX p XXXXXXX p XXXXX p X
+ X                                            X
+ X vpppppppvppppvppppvppppvppppvppppvpppppppv X
+ X                                            X
+ X p XXXXX p XX p XXXXXXXXXXXX p XX p XXXXX p X
+ X p XXXXX p XX p XXXXXXXXXXXX p XX p XXXXX p X
+ X           XX        XX        XX           X
+ X vpppppppv XX vppppv XX vppppv XX vpppppppv X
+ X           XX        XX        XX           X
+ XXXXXXXXX p XXXXXXX   XX   XXXXXXX p XXXXXXXXX
+         X p XXXXXXX   XX   XXXXXXX p X
+         X p XX                  XX p X
+         X p XX v    v  v  v   v XX p X
+         X p XX                  XX p X
+         X p XX   XXXXssssXXXX   XX p X
+ XXXXXXXXX p XX   X          X   XX p XXXXXXXXX
+ X                X          X                X
+ X v       v    v X     v    X v    v       v X
+ X                X          X                X
+ XXXXXXXXX p XX   X          X   XX p XXXXXXXXX
+         X p XX   XXXXXXXXXXXX   XX p X
+         X p XX                  XX p X
+         X p XX v       v      v XX p X
+         X p XX                  XX p X
+         X p XX   XXXXXXXXXXXX   XX p X
+ XXXXXXXXX p XX   XXXXXXXXXXXX   XX p XXXXXXXXX
+ X                     XX                     X
+ X vpppppppvppppvppppv XX vppppvppppvpppppppv X
+ X                     XX                     X
+ X p XXXXX p XXXXXXX p XX p XXXXXXX p XXXXX p X
+ X p XXXXX p XXXXXXX p XX p XXXXXXX p XXXXX p X
+ X p    XX p                        p XX    p X
+ X oppv XX vppppvppppvpSppvppppvppppv XX vppo X
+ X      XX p                        p XX      X
+ XXXX p XX p XX p XXXXXXXXXXXX p XX p XX p XXXX
+ XXXX p XX p XX p XXXXXXXXXXXX p XX p XX p XXXX
+ X           XX        XX        XX           X
+ X vppvppppv XX vppppv XX vppppv XX vppppvppv X
+ X           XX        XX        XX           X
+ X p XXXXXXXXXXXXXXX p XX p XXXXXXXXXXXXXXX p X
+ X p XXXXXXXXXXXXXXX p XX p XXXXXXXXXXXXXXX p X
+ X                                            X
+ X vpppppppppppppppppvppppvpppppppppppppppppv X
+ X                                            X
+ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+
