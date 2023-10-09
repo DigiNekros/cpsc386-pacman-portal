@@ -15,7 +15,9 @@ from pygame.sprite import Group
 # from portal import Portal
 from maze import Maze
 from events import Events
-# from graph import Graph
+from points import Points
+from graph import Graph
+from shield import Shield
 
 BLACK = (0, 0, 0)
 WHITE = (250, 250, 250)
@@ -33,18 +35,6 @@ class Game:
         # self.game_stats = GameStats(self.screen, self.settings)
         # self.startscreen = StartScreen(self.screen, self.settings, self.game_stats)
 
-        # Grouping blocks, pellets, and ghosts
-        self.blocks = Group()
-        self.power_pills = Group()
-        self.points = Group()
-        self.shield = Group()
-        self.portals = Group()
-        self.ghosts = Group()
-        self.intersections = Group()
-        # self.fruit = Fruit(self.screen)
-        self.maze = Maze(game=self, file='maze.txt')
-        # self.maze.create_maze()
-
         # Making the characters
         # self.the_pac_man = Pacman(game=self)
         # # Making the ghosts
@@ -52,6 +42,19 @@ class Game:
         # cyan_ghost = Ghosts(self.screen, "cyan")
         # orange_ghost = Ghosts(self.screen, "orange")
         # pink_ghost = Ghosts(self.screen, "pink")
+
+        # Grouping blocks, pellets, and ghosts
+        self.blocks = Group()
+        # self.power_pills = Group()
+        # self.points = Group()
+        self.points = Points(game=self, file='maze_2.txt')
+        self.shield = Shield(game=self, file='maze_2.txt')
+        self.portals = Group()
+        self.ghosts = Group()
+        self.intersections = Group()
+        # self.fruit = Fruit(self.screen)
+        self.maze = Maze(game=self, file='maze_2.txt')
+        self.graph = Graph(game=self, file='graph_visual_2.txt')
 
         # Add ghosts to the group
         # self.ghosts.add(red_ghost)
@@ -71,9 +74,10 @@ class Game:
         while True:
             Events.handle_events(game=self)
             self.screen.fill(self.settings.bg_color)
-            # print('Drawing the maze')
-            self.maze.draw()
-            # print('Flipping')
+            self.maze.update()
+            self.graph.draw()
+            self.points.update()
+            self.shield.update()
             pg.display.flip()
             self.clock.tick(120)
 

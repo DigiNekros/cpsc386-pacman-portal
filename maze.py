@@ -4,6 +4,7 @@
 import pygame as pg
 from pygame.sprite import Sprite, Group
 from pathlib import Path
+import file_functions as f
 
 
 MEDIUM_BLUE = (0, 0, 205)
@@ -56,10 +57,11 @@ class Maze:
         self.height = game.settings.wall_height
         self.top = 20
         self.y = self.top
-        self.left = None
+        self.left = 8
         self.rows = []
         self.maze_walls = []
-        self.get_maze(file=self.file)
+        
+        f.read_file(list=self.rows, file=self.file)
         self.create_maze()
 
     # for troubleshooting
@@ -69,27 +71,8 @@ class Maze:
             print(f'{self.rows[i]}')
             i += 1
 
-    def get_maze(self, file):
-        f = Path(file)
-        contents = f.read_text()
-        
-        i = 0
-        # break up into rows
-        while i < len(contents):
-            string = ''
-            char = contents[i]
-            while char != '\n' and i < len(contents):
-                string += char
-                i += 1
-                if i < len(contents):
-                    char = contents[i]
-            if string != '':
-                self.rows.append(string)
-            i += 1
-
     def set_side(self):
-        self.left = 20
-        self.x = 20
+        self.x = self.left
 
     def create_maze(self):
         i = 0
@@ -120,3 +103,6 @@ class Maze:
     def draw(self):
         for i in range(len(self.maze_walls)):
             self.maze_walls[i].draw()
+
+    def update(self):
+        self.draw()
