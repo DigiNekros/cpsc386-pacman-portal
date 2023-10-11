@@ -32,9 +32,9 @@ def check_keydown_events(event, pacman, orange, blue):
         pacman.moving_left = True
     elif event.key == pygame.K_SPACE:
         pass
-    elif event.key == pygame.K_q:
+    elif event.key == pygame.K_o:
         place_portal_orange(pacman, orange)
-    elif event.key == pygame.K_w:
+    elif event.key == pygame.K_b:
         place_portal_blue(pacman, blue)
 
 def check_keyup_events(event, pacman):
