@@ -32,9 +32,9 @@ def check_keydown_events(event, pacman, orange, blue):
         pacman.moving_left = True
     elif event.key == pygame.K_SPACE:
         pass
-    elif event.key == pygame.K_o:
+    elif event.key == pygame.K_z:
         place_portal_orange(pacman, orange)
-    elif event.key == pygame.K_b:
+    elif event.key == pygame.K_x:
         place_portal_blue(pacman, blue)
 
 def check_keyup_events(event, pacman):
@@ -422,26 +422,34 @@ def readFile(screen, blocks, shield, powerpills, intersections):
     for rows in all_lines:
         for chars in rows:
             if chars == 'X':
-                new = Blocks(screen)
-                new.rect.x, new.rect.y = 13 * i, 13 * j
-                blocks.add(new)
+                # new = Blocks(screen)
+                # new.rect.x, new.rect.y = 13 * i, 13 * j
+                # blocks.add(new)
+                x, y = 13 * i, 13 * j
+                blocks.create_block(x=x, y=y)
             elif chars == 'd':
-                thepowerpill = Powerpills(screen)
-                thepowerpill.rect.x, thepowerpill.rect.y = 13 * i, 13 * j
-                powerpills.add(thepowerpill)
+                # thepowerpill = Powerpills(screen)
+                # thepowerpill.rect.x, thepowerpill.rect.y = 13 * i, 13 * j
+                # powerpills.add(thepowerpill)
+                x, y = 13 * i, 13 * j
+                powerpills.create_powerpill(x=x, y=y)
             elif chars == 'b':
-                thepowerpill = Powerpills(screen, 'big')
-                thepowerpill.rect.x, thepowerpill.rect.y = 13 * i, 13 * j
-                powerpills.add(thepowerpill)
+                # thepowerpill = Powerpills(screen, 'big')
+                # thepowerpill.rect.x, thepowerpill.rect.y = 13 * i, 13 * j
+                # powerpills.add(thepowerpill)
+                x, y = 13 * i, 13 * j
+                powerpills.create_powerpill(x=x, y=y, size='big')
             elif chars == 'i':
                 intersection = Intersections(screen, intersection_num)
                 intersection_num+=1
                 intersection.rect.x, intersection.rect.y = 13 * i, 13 * j
                 intersections.add(intersection)
             elif chars == 'o':
-                theshield = Shield(screen)
-                theshield.rect.x, theshield.rect.y = 13 * i, 13 * j
-                shield.add(theshield)
+                # theshield = Shield(screen)
+                # theshield.rect.x, theshield.rect.y = 13 * i, 13 * j
+                # shield.add(theshield)
+                x, y = 13 * i, 13 * j
+                shield.create_shield(x=x, y=y)
             i += 1
         i = 0
         j += 1

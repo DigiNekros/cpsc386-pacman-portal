@@ -1,10 +1,10 @@
 import pygame
-from pygame.sprite import Sprite
+from pygame.sprite import Sprite, Group
 from SpriteSheet import spritesheet
 
 
 class Portal(Sprite):
-    def __init__(self, screen, type):
+    def __init__(self, screen, type, x, y):
         super(Portal, self).__init__()
         self.screen = screen
         self.type = type
@@ -28,6 +28,8 @@ class Portal(Sprite):
 
         img = pygame.transform.scale(img, (15, 15))
         self.rect = img.get_rect()
+        self.rect.x = x
+        self.rect.y = y
         self.image = img
 
         # direction pacman would be coming out
@@ -66,3 +68,16 @@ class Portal(Sprite):
             elif (direction == 'down'):
                 self.image = self.blue_down
                 self.output = 'up'
+
+
+class Portals:
+    def __init__(self, screen):
+        self.screen = screen
+        self.portals = Group()
+
+    def add_portal(self, portal):
+        self.portals.add(portal)
+
+    def draw(self):
+        for portal in self.portals:
+            portal.blitportal()

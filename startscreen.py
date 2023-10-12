@@ -36,15 +36,14 @@ class StartScreen():
         # Load in Pacman image
         self.height = 125
         self.width = 125
-        img = ss.image_at((0, 0, 32, 32))
+        img = ss.image_at((0,0,32,32))
         img = pygame.transform.scale(img, (self.height, self.width))
         self.rect = img.get_rect()
         self.rect.x, self.rect.y = 310, 515
         self.rect.left -= self.rect.width
         self.rect.top -= self.rect.height
-
-        # Flip the Pacman image horizontally
-        self.pacmanimage = pygame.transform.flip(img, True, False)
+        self.pacmanimage = img
+        self.rect = self.pacmanimage.get_rect()
 
         self.text_color = (30, 30, 30)
         self.font = pygame.font.SysFont(None, 48)
@@ -68,8 +67,8 @@ class StartScreen():
         titlepinkghost.rect.x = -175
         titlecyanghost.speed, titleorangeghost.speed, titlepinkghost.speed, titleredghost.speed = 2, 2, 2, 2
 
-        pygame.init()
-        pygame.display.set_caption("PACMAN")
+        # pygame.init()
+        # pygame.display.set_caption("PACMAN")
 
         background = pygame.Surface(screen.get_size())
         background = background.convert()
