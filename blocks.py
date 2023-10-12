@@ -20,9 +20,11 @@ class Blocks(Sprite):
         pygame.draw.rect(self.screen, self.color, self.rect)
 
 class Maze:
-    def __init__(self, screen):
+    def __init__(self, screen, game):
         self.screen = screen
         self.blocks = Group()
+        self.game = game
+        self.frames = game.frames
 
     def create_block(self, x, y):
         block = Blocks(screen=self.screen, x=x, y=y)
@@ -31,3 +33,23 @@ class Maze:
     def draw(self):
         for block in self.blocks:
             block.blitblocks()
+
+    def change_color(self):
+        if(self.frames <= 120):
+            for block in self.blocks:
+                block.color = ((255,255,255))
+            self.draw()
+        elif(self.frames <= 240):
+            for block in self.blocks:
+                block.color = ((0,0,255))
+            self.draw()
+        elif (self.frames <= 360):
+            for block in self.blocks:
+                block.color = ((255, 255, 255))
+            self.draw()
+        elif (self.frames <= 480):
+            for block in self.blocks:
+                block.color = ((0, 0, 255))
+            self.draw()
+        else:
+            self.game.next_level()

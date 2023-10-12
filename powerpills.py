@@ -30,7 +30,7 @@ class PowerPills:
         self.powerpills = Group()
 
     def create_powerpill(self, x, y, size='small'):
-        powerpill = Powerpill(x=x, y=y, size=size)
+        powerpill = Powerpill(screen=self.screen, x=x, y=y, size=size)
         self.powerpills.add(powerpill)
 
     def draw(self):

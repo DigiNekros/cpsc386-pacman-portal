@@ -12,6 +12,7 @@ from portal import Portal, Portals
 from blocks import Maze
 from shield import Shields
 from powerpills import PowerPills
+from intersection import Intersections
 
 
 BLACK = (0, 0, 0)
@@ -27,45 +28,56 @@ class Game:
         # Start screen
         self.showgamestats = GameStats(self.screen, self.gamesettings)
         self.startScreen = StartScreen(self.screen, self.gamesettings, self.showgamestats)
+        self.frames = 0 # for the victory fanfare and death animation
 
         # Grouping blocks and pellets and ghosts
         # self.blocks = Group()
-        self.blocks = Maze(screen=self.screen)
+        self.blocks = Maze(screen=self.screen, game=self)
         self.powerpills = PowerPills(screen=self.screen)
         # self.powerpills = Group()
         # self.shield = Group()
         self.shield = Shields(screen=self.screen)
         self.portals = Portals(screen=self.screen)
         # self.portals = Group()
-        self.ghosts = Group()
-        self.intersections = Group()
+        self.intersections = Intersections(screen=self.screen)
+        self.ghosts = Ghosts(game=self)
+        # self.intersections = Intersections(screen=self.screen)
+        # self.intersections = Group()
         self.fruit = Fruit(self.screen)
+        gf.readFile(blocks=self.blocks, shield=self.shield, powerpills=self.powerpills, intersections=self.intersections)
 
-        self.thepacman = Pacman(self.screen, self.gamesettings)
+        self.thepacman = Pacman(game=self)
+
+        self.ghosts.pacman = self.thepacman.returnPacman()
 
         # Making the ghosts
-        redghost = Ghosts(self.screen, "red")
-        cyanghost = Ghosts(self.screen, "cyan")
-        orangeghost = Ghosts(self.screen, "orange")
-        pinkghost = Ghosts(self.screen, "pink")
+        ghostcolor = ["red", "cyan", "orange", "pink"]
+        for index in range(len(ghostcolor)):
+            self.ghosts.create_ghost(color=ghostcolor[index])
+
+        # Making the ghosts
+        # redghost = Ghost(self.screen, "red")
+        # cyanghost = Ghost(self.screen, "cyan")
+        # orangeghost = Ghost(self.screen, "orange")
+        # pinkghost = Ghost(self.screen, "pink")
         
-        self.ghosts.add(redghost)
-        self.ghosts.add(cyanghost)
-        self.ghosts.add(orangeghost)
-        self.ghosts.add(pinkghost)
+        # self.ghosts.add(redghost)
+        # self.ghosts.add(cyanghost)
+        # self.ghosts.add(orangeghost)
+        # self.ghosts.add(pinkghost)
         
         # Making the two portals
-        self.orange = Portal(self.screen, "orange")
-        self.blue = Portal(self.screen, "blue")
+        # self.orange = Portal(self.screen, "orange")
+        # self.blue = Portal(self.screen, "blue")
         
-        self.portals.add_portal(self.orange)
-        self.portals.add_portal(self.blue)
+        # self.portals.add_portal(self.orange)
+        # self.portals.add_portal(self.blue)
         
         # self.startScreen.makeScreen(self.screen, self.gamesettings)
         self.fruit.fruitReset()
-        gf.readFile(self.screen, self.blocks, self.shield, self.powerpills, self.intersections)
+        # gf.readFile(blocks=self.blocks, shield=self.shield, powerpills=self.powerpills, intersections=self.intersections)
         
-        self.frames = 0 # for the victory fanfare and death animation
+        # self.frames = 0 # for the victory fanfare and death animation
         
         # play intro chime
         self.playIntro = True
@@ -75,10 +87,10 @@ class Game:
     
     def check_start(self):
         if not self.gamesettings.game_active:
-            self.startScreen.makeScreen(self.screen, self.gamesettings)
+            self.startScreen.makeScreen(self.screen, self.gamesettings, self)
 
     def check_win(self):
-        if (len(self.powerpills) == 0):
+        if (len(self.powerpills.powerpills) == 0):
                 self.gamesettings.game_active = False
                 self.gamesettings.victory_fanfare = True
 
@@ -92,9 +104,8 @@ class Game:
         self.gamesettings.game_active = True
         self.gamesettings.victory_fanfare = False
         self.thepacman.resetPosition()
-        for ghost in self.ghosts:
-            ghost.resetPosition()
-            ghost.speed += 1
+        self.ghosts.reset()
+        self.ghosts.change_speed() # changes speed to += 1
     
     def next_level(self):
         self.reset()
@@ -110,26 +121,37 @@ class Game:
         pygame.time.wait(2000)
         self.gamesettings.game_active = False
         self.thepacman.resetPosition()
-        for ghost in self.ghosts:
-                ghost.resetPosition()
-                ghost.speed = 1
+        self.ghosts.reset()
+        self.ghosts.change_speed(reset=True) # changes speed to 1
         self.showgamestats.num_lives = 3
         self.showgamestats.save_hs_to_file()
         self.showgamestats.score = 0
         self.showgamestats.level = 1
         self.fruit.fruitReset()
         self.playIntro = True # reset the chime
-        gf.readFile(self.screen, self.blocks, self.shield, self.powerpills, self.intersections)
-        self.startScreen.makeScreen(self.screen, self.gamesettings)
+        # gf.readFile(self.screen, self.blocks, self.shield, self.powerpills, self.intersections)
+        self.startScreen.makeScreen(self.screen, self.gamesettings, self)
 
     def check_game_over(self):
         if(self.showgamestats.num_lives < 0):
             self.game_over()
 
+    def reset_level(self):
+        self.thepacman.deathAnimation(self.frames)
+        self.frames += 1
+        if(self.frames > 600):
+            self.gamesettings.game_active = True
+            self.thepacman.DEAD = False
+            self.thepacman.resetPosition()
+            self.ghosts.reset()
+            self.frames = 0
+            pygame.time.wait(1000)
+
     def play(self):
         # self.screen.fill(BLACK)
         while True:
-            gf.check_events(self.thepacman, self.powerpills, self.gamesettings, self.orange, self.blue)
+            # gf.check_events(self.thepacman, self.powerpills, self.gamesettings, self.orange, self.blue)
+            gf.check_events(game=self)
             self.check_start()
             if(self.gamesettings.game_active):
                 pygame.time.Clock().tick(120) #120 fps lock
@@ -139,57 +161,22 @@ class Game:
                 # gf.check_collision(self.thepacman, self.blocks, self.powerpills, self.shield, self.ghosts, 
                 #                    self.intersections, self.showgamestats, self.gamesettings, self.fruit, 
                 #                    self.orange, self.blue)
+                self.portals.update()
                 self.blocks.draw()
                 self.shield.draw()
                 self.powerpills.draw()
-                self.portals.draw()
-                for ghost in self.ghosts:
-                    ghost.blitghosts()
-                    ghost.update()
-                    if(ghost.DEAD):
-                        ghost.playRetreatSound()
-                    elif(ghost.afraid):
-                        ghost.playAfraidSound()# if ghosts are afraid, loop their sound
-                for intersection in self.intersections:
-                    intersection.blit()
+                self.ghosts.update()
+                self.intersections.draw()
                 self.fruit.blitfruit()
-                self.thepacman.blitpacman()
                 self.thepacman.update()
                 self.check_win()
                 self.check_if_play_intro_sound()
                 
             elif(self.gamesettings.victory_fanfare):
-                if(self.frames <= 120):
-                    for block in self.blocks:
-                        block.color = ((255,255,255))
-                        block.blitblocks()
-                elif(self.frames <= 240):
-                    for block in self.blocks:
-                        block.color = ((0,0,255))
-                        block.blitblocks()
-                elif (self.frames <= 360):
-                    for block in self.blocks:
-                        block.color = ((255, 255, 255))
-                        block.blitblocks()
-                elif (self.frames <= 480):
-                    for block in self.blocks:
-                        block.color = ((0, 0, 255))
-                        block.blitblocks()
-                else:
-                    self.next_level()
+                self.blocks.change_color()
                 self.frames += 1
             elif(self.thepacman.DEAD):
-                self.thepacman.deathAnimation(self.frames)
-                self.frames += 1
-                if(self.frames > 600):
-                    self.gamesettings.game_active = True
-                    self.thepacman.DEAD = False
-                    self.thepacman.resetPosition()
-                    for ghost in self.ghosts:
-                        ghost.resetPosition()
-                    self.frames = 0
-                    pygame.time.wait(1000)
-            
+                self.reset_level()
             self.check_game_over()
             pygame.display.flip()
 

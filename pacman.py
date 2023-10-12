@@ -3,9 +3,16 @@ from pygame import mixer
 import SpriteSheet
 
 class Pacman():
-    def __init__(self, screen, settings):
-        self.screen = screen
-        self.settings = settings
+    def __init__(self, game):
+        self.screen = game.screen
+        self.settings = game.gamesettings
+        self.game = game
+        self.blocks = game.blocks.blocks
+        self.shields = game.shield.shields
+        self.powerpills = game.powerpills
+        self.ghosts = game.ghosts
+        self.fruit = game.fruit
+        self.portals = game.portals
         self.height = 35
         self.width = 35
         ss = SpriteSheet.spritesheet('images/PacmanSpriteSheet.png')
@@ -54,8 +61,10 @@ class Pacman():
         # to know what direction to place portal
         self.last_direction = 'left'
 
-    # Updates pacman direction and sprite depending on direction
-    def update(self):
+    def returnPacman(self):
+        return self
+    
+    def update_movement(self):
         if self.moving_right:
             self.rect.x += self.settings.pacmanspeed
             self.image = self.right_image
@@ -71,7 +80,30 @@ class Pacman():
         if self.moving_down:
             self.rect.y += self.settings.pacmanspeed
             self.image = self.down_image
-            l=self.last_direction = 'down'
+            self.last_direction = 'down'
+
+
+    # Updates pacman direction and sprite depending on direction
+    def update(self):
+        # if self.moving_right:
+        #     self.rect.x += self.settings.pacmanspeed
+        #     self.image = self.right_image
+        #     self.last_direction = 'right'
+        # if self.moving_left:
+        #     self.rect.x -= self.settings.pacmanspeed
+        #     self.image = self.left_image
+        #     self.last_direction = 'left'
+        # if self.moving_up:
+        #     self.rect.y -= self.settings.pacmanspeed
+        #     self.image = self.up_image
+        #     self.last_direction = 'up'
+        # if self.moving_down:
+        #     self.rect.y += self.settings.pacmanspeed
+        #     self.image = self.down_image
+        #     self.last_direction = 'down'
+        self.update_movement()
+        self.check_collision()
+        self.blitpacman()
 
     def blitpacman(self):
         if pygame.time.get_ticks() % 200 <= 50:
@@ -113,9 +145,142 @@ class Pacman():
 
     def playPelletEatSound(self):
         mixer.Channel(0).play(pygame.mixer.Sound('sounds/power_pellet_eaten.wav'))
+
     def playDeathSound(self):
         mixer.Channel(0).play(pygame.mixer.Sound('sounds/life_lost.wav'))
+
     def playFruitEatenSound(self):
         mixer.Channel(0).play(pygame.mixer.Sound('sounds/fruit_eaten.wav'))
 
+    # Check direction pacman is going to compare and see if he can't go a direction anymore if he hit a block
+    def check_direction(self, block):
+        left = False
+        right = False
+        up = False
+        down = False
+        if self.rect.centerx <= block.rect.centerx:
+            right = True
+        else:
+            left = True
+        if self.rect.y + self.rect.height / 2 <= block.rect.y + block.rect.height / 2:
+            up = True
+        else:
+            down = True
 
+        if left:
+            self.rect.x += 1
+        elif right:
+            self.rect.x -= 1
+        if up:
+            self.rect.y -= 1
+        elif down:
+            self.rect.y += 1
+
+    def check_shield_direction(self, shield):
+        left = False
+        right = False
+        up = False
+        down = False
+        
+        if self.rect.centerx <= shield.rect.centerx:
+            right = True
+        else:
+            left = True
+        if self.rect.y + self.rect.height / 2 <= shield.rect.y + shield.rect.height / 2:
+            up = True
+        else:
+            down = True
+
+        if left:
+            self.rect.x += 1
+        elif right:
+            self.rect.x -= 1
+        if up:
+            self.rect.y -= 1
+        elif down:
+            self.rect.y += 1
+            
+    # Pacman and ghosts collision handling
+    def check_collision(self): # blocks, powerpills, shield, ghosts, intersections, showgamestats, gamesettings, fruit, orange, blue):
+        for block in self.blocks:
+            if pygame.sprite.collide_rect(self, block):
+                self.check_direction(block)
+
+        for shield in self.shields:
+            if pygame.sprite.collide_rect(self, shield):
+                self.check_shield_direction(shield)
+        
+        if pygame.sprite.spritecollide(self, self.powerpills.powerpills, False):
+            for powerpill in self.powerpills:
+                if (pygame.sprite.collide_rect(self, powerpill)):
+                    for ghost in self.ghosts:
+                        if(ghost.color == 'red'):
+                            ghost.speed += .001  # speed up Blinky's (red ghost) speed for every pellet eaten
+                    self.powerpills.remove(powerpill)
+                if(powerpill.size == 'big'):
+                    for ghost in self.ghosts:
+                        ghost.afraid = True
+                        ghost.frames = 0 # reset the afraid timer
+                    self.game.showgamestats.score += 50
+                else:
+                    self.game.showgamestats.score += 10
+                    self.playPelletEatSound()
+                    
+        if pygame.sprite.collide_rect(self, self.fruit):
+            if(not self.fruit.destroyed):
+                self.game.showgamestats.score += self.fruit.value
+                self.fruit.destroyed = True
+                self.playFruitEatenSound()
+                
+        if (pygame.sprite.spritecollide(self, self.ghosts.ghosts, False)):
+            for ghost in self.ghosts:
+                if (pygame.sprite.collide_rect(self, ghost)):
+                    if(ghost.afraid and not ghost.DEAD):
+                        ghost.DEAD = True
+                        pts = 0
+                        for ghost in self.ghosts:
+                            if(ghost.DEAD):
+                                pts += 1
+                                ghost.value = 100 * 2**pts
+                        self.showgamestats.score += 100 * 2**pts
+                        ghost.playDeathSound()
+                        pygame.time.wait(500)
+                    elif(not ghost.afraid and not ghost.DEAD):
+                        self.DEAD = True
+                        self.game.gamesettings.game_active = False
+                        self.game.showgamestats.num_lives -= 1
+                        self.playDeathSound()
+                        break
+                    
+        # portal teleport
+        if(pygame.sprite.collide_rect(self, self.portals.orange)):
+            blue = self.portals.blue
+            if(blue.portal_placed):
+                self.portals.close_portal(color='orange') # close the orange portal
+                if(blue.output == 'left'):
+                    self.rect.x, self.rect.y = blue.rect.x - 40, blue.rect.y
+                elif (blue.output == 'right'):
+                    self.rect.x, self.rect.y = blue.rect.x + 40, blue.rect.y
+                elif (blue.output == 'up'):
+                    self.rect.x, self.rect.y = blue.rect.x, blue.rect.y - 40
+                elif (blue.output == 'down'):
+                    self.rect.x, self.rect.y = blue.rect.x, blue.rect.y + 40
+                pygame.time.wait(0.05) # wait so can notice change
+                self.portals.close_portal(color='blue')
+
+
+        if(pygame.sprite.collide_rect(self, self.portals.blue)):
+            orange = self.portals.orange
+            if(orange.portal_placed):
+                self.portals.close_portal(color='blue') # close the blue portal
+                if (orange.output == 'left'):
+                    self.rect.x, self.rect.y = orange.rect.x - 40, orange.rect.y
+                elif (orange.output == 'right'):
+                    self.rect.x, self.rect.y = orange.rect.x + 40, orange.rect.y
+                elif (orange.output == 'up'):
+                    self.rect.x, self.rect.y = orange.rect.x, orange.rect.y - 40
+                elif (orange.output == 'down'):
+                    self.rect.x, self.rect.y = orange.rect.x, orange.rect.y + 40
+                self.portals.remove(orange)
+                pygame.time.wait(0.5) # wait so can notice change
+                self.portals.close_portal(color='orange')

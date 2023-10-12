@@ -6,9 +6,9 @@ from pygame import mixer
 import SpriteSheet
 from random import randint
 
-class Ghosts(Sprite):
+class Ghost(Sprite):
     def __init__(self, screen, color):
-        super(Ghosts, self).__init__()
+        super(Ghost, self).__init__()
         self.color = color # ghost type
         self.screen = screen
         self.height = 35
@@ -180,3 +180,295 @@ class Ghosts(Sprite):
 
     def playRetreatSound(self):
         mixer.Channel(1).play(pygame.mixer.Sound('sounds/ghosts_ambient_scared1.wav'))
+
+
+class Ghosts:
+    def __init__(self, game):
+        self.game = game
+        self.screen = game.screen
+        self.pacman = None
+        self.blocks = game.blocks.blocks
+        self.intersections = game.intersections.intersections
+        self.portals = game.portals
+        self.ghosts = Group()
+
+    def create_ghost(self, color):
+        ghost = Ghost(screen=self.screen, color=color)
+        self.ghosts.add(ghost)
+
+    def update_ghosts(self):
+        for ghost in self.ghosts:
+            ghost.update()
+
+    def draw(self):
+        for ghost in self.ghosts:
+            ghost.blitghosts()
+            if(ghost.DEAD):
+                ghost.playRetreatSound()
+            elif(ghost.afraid):
+                ghost.playAfraidSound() # if ghosts are afraid, loop their sound
+
+    def update(self):
+        self.update_ghosts()
+        self.check_collision()
+        self.draw()
+
+    def reset(self):
+        for ghost in self.ghosts:
+            ghost.resetPosition()
+
+    def change_speed(self, reset=False):
+        if reset:
+            for ghost in self.ghosts:
+                ghost.speed = 1
+        else:
+            for ghost in self.ghosts:
+                ghost.speed += 1
+
+    # Check direction ghost is going to compare and see if they can't go a direction anymore if they hit a block
+    def check_direction(ghost, block):
+        left = False
+        right = False
+        up = False
+        down = False
+        if ghost.rect.centerx <= block.rect.centerx:
+            right = True
+        else:
+            left = True
+        if ghost.rect.y + ghost.rect.height / 2 <= block.rect.y + block.rect.height / 2:
+            up = True
+        else:
+            down = True
+
+        if left:
+            ghost.rect.x += 1
+        elif right:
+            ghost.rect.x -= 1
+        if up:
+            ghost.rect.y -= 1
+        elif down:
+            ghost.rect.y += 1
+
+    # Ghosts collision handling
+    def check_collision(self):
+        for block in self.blocks:
+            for ghost in self.ghosts:
+                if (pygame.sprite.collide_rect(ghost, block)):
+                    self.check_direction(ghost=ghost, block=block)
+
+        for intersection in self.intersections:
+            for ghost in self.ghosts:
+                if(pygame.sprite.collide_rect(ghost, intersection)):
+                    self.ghost_intersection_behavior(ghost, self.pacman, intersection)
+
+        if(self.game.showgamestats.level > 4): # if player beyond level 4, ghosts can enter and exit portals too
+            for ghost in self.ghosts:
+                orange = self.portals.orange
+                blue = self.portals.blue
+
+                if (pygame.sprite.collide_rect(ghost, orange)):
+                    if (blue.portal_placed):
+                        self.portals.close_portal(color='orange') # close the orange portal
+                        if (blue.output == 'left'):
+                            ghost.rect.x, ghost.rect.y = blue.rect.x - 40, blue.rect.y
+                        elif (blue.output == 'right'):
+                            ghost.rect.x, ghost.rect.y = blue.rect.x + 40, blue.rect.y
+                        elif (blue.output == 'up'):
+                            ghost.rect.x, ghost.rect.y = blue.rect.x, blue.rect.y - 40
+                        elif (blue.output == 'down'):
+                            ghost.rect.x, ghost.rect.y = blue.rect.x, blue.rect.y + 40
+                        pygame.time.wait(0.5) # wait so can notice the change
+                        self.portals.close_portal(color='blue') # close the blue portal
+                
+                if (pygame.sprite.collide_rect(ghost, blue)):
+                    if (orange.portal_placed):
+                        self.portals.close_portal(color='blue') # close the blue portal
+                        if (orange.output == 'left'):
+                            ghost.rect.x, ghost.rect.y = orange.rect.x - 40, orange.rect.y
+                        elif (orange.output == 'right'):
+                            ghost.rect.x, ghost.rect.y = orange.rect.x + 40, orange.rect.y
+                        elif (orange.output == 'up'):
+                            ghost.rect.x, ghost.rect.y = orange.rect.x, orange.rect.y - 40
+                        elif (orange.output == 'down'):
+                            ghost.rect.x, ghost.rect.y = orange.rect.x, orange.rect.y + 40
+                        pygame.time.wait(0.5) # wait so can notice the change
+                        self.portals.close_portal(color='orange') # close the orange portal
+
+    #Ghost AI.
+    def ghost_intersection_behavior(self, ghost, pacman, intersection):
+        # special code for intersection 24
+        if(ghost.DEAD and intersection.number == 24):
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = True
+        elif(not ghost.DEAD and intersection.number == 24 and not ghost.last_intersection == intersection.number):
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if ((pacman.rect.x <= ghost.rect.x and abs(pacman.rect.x - ghost.rect.x) > 3) and intersection.left):
+                ghost.moving_left = True
+            elif ((pacman.rect.x >= ghost.rect.x and abs(pacman.rect.x - ghost.rect.x) > 3) and intersection.right):
+                ghost.moving_right = True
+            else: # failsafe because ghosts keep getting stuck in the shield
+                ghost.moving_left = True
+            ghost.last_intersection = intersection.number
+
+        # intersection 30 is the one in the box
+        elif(intersection.number == 30):
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = True
+            ghost.moving_down = False
+
+            ghost.DEAD = False
+            ghost.afraid = False
+
+        # x,y = 351, 234 is the location of intersection number 24, the entrance of the box
+        elif(ghost.DEAD):
+            if ((abs(351 - ghost.rect.x) <= abs(234 - ghost.rect.y))
+                and not ghost.last_intersection == intersection.number):
+                ghost.moving_left = False
+                ghost.moving_right = False
+                ghost.moving_up = False
+                ghost.moving_down = False
+                if (intersection.up or intersection.down):
+                    if ((234 <= ghost.rect.y and abs(234 - ghost.rect.y) > 3) and intersection.up):
+                        ghost.moving_up = True
+                    elif ((234 >= ghost.rect.y and abs(234 - ghost.rect.y) > 3) and intersection.down):
+                        ghost.moving_down = True
+                    elif (intersection.left or intersection.right):
+                        if (intersection.left):
+                            ghost.moving_left = True
+                        elif (intersection.right):
+                            ghost.moving_right = True
+                elif (intersection.left or intersection.right):
+                    if ((351 <= ghost.rect.x and abs(351 - ghost.rect.x) > 3) and intersection.left):
+                        ghost.moving_left = True
+                    elif ((351 >= ghost.rect.x and abs(351 - ghost.rect.x) > 3) and intersection.right):
+                        ghost.moving_right = True
+                    elif (intersection.up or intersection.down):
+                        if (intersection.up):
+                            ghost.moving_up = True
+                        elif (intersection.down):
+                            ghost.moving_down = True
+                ghost.last_intersection = intersection.number
+
+            elif ((abs(351 - ghost.rect.x) >= abs(234 - ghost.rect.y))
+              and not ghost.last_intersection == intersection.number):
+                ghost.moving_left = False
+                ghost.moving_right = False
+                ghost.moving_up = False
+                ghost.moving_down = False
+                if (intersection.left or intersection.right):
+                    if ((351 <= ghost.rect.x and abs(351 - ghost.rect.x) > 3) and intersection.left):
+                        ghost.moving_left = True
+                    elif ((351 >= ghost.rect.x and abs(351 - ghost.rect.x) > 3) and intersection.right):
+                        ghost.moving_right = True
+                    elif (intersection.up or intersection.down):
+                        if (intersection.up):
+                            ghost.moving_up = True
+                        elif (intersection.down):
+                            ghost.moving_down = True
+                elif (intersection.up or intersection.down):
+                    if ((234 <= ghost.rect.y and abs(234 - ghost.rect.y) > 3) and intersection.up):
+                        ghost.moving_up = True
+                    elif ((234 >= ghost.rect.y and abs(234 - ghost.rect.y) > 3) and intersection.down):
+                        ghost.moving_down = True
+                    elif (intersection.left or intersection.right):
+                        if (intersection.left):
+                            ghost.moving_left = True
+                        elif (intersection.right):
+                            ghost.moving_right = True
+                ghost.last_intersection = intersection.number
+
+        elif(ghost.afraid): #if afraid, run from pacman
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.x <= ghost.rect.x and abs(pacman.rect.x - ghost.rect.x) > 3):
+                ghost.moving_right = True
+            elif (pacman.rect.x >= ghost.rect.x and abs(pacman.rect.x - ghost.rect.x) > 3):
+                ghost.moving_left = True
+            if (pacman.rect.y <= ghost.rect.y and abs(pacman.rect.y - ghost.rect.y) > 3):
+                ghost.moving_down = True
+            elif(pacman.rect.y >= ghost.rect.y and abs(pacman.rect.y - ghost.rect.y) > 3):
+                ghost.moving_up = True
+
+        elif(randint(1,100) <= 25 and not ghost.last_intersection == intersection.number): # go in a random direction every once in a while
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            while(True):
+                if (randint(0, 1) == 0 and intersection.left):
+                    ghost.moving_left = True
+                    break
+                elif (randint(0, 1) == 0 and intersection.right):
+                    ghost.moving_right = True
+                    break
+                elif (randint(0, 1) == 0 and intersection.up):
+                    ghost.moving_up = True
+                    break
+                elif (randint(0, 1) == 0 and intersection.down):
+                    ghost.moving_down = True
+                    break
+            ghost.last_intersection = intersection.number
+
+        elif((abs(pacman.rect.x - ghost.rect.x) <= abs(pacman.rect.y - ghost.rect.y))
+            and not ghost.last_intersection == intersection.number):
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if(intersection.up or intersection.down):
+                if ((pacman.rect.y <= ghost.rect.y and abs(pacman.rect.y - ghost.rect.y) > 3) and intersection.up):
+                    ghost.moving_up = True
+                elif ((pacman.rect.y >= ghost.rect.y and abs(pacman.rect.y - ghost.rect.y) > 3) and intersection.down):
+                    ghost.moving_down = True
+                elif(intersection.left or intersection.right):
+                    if (intersection.left):
+                        ghost.moving_left = True
+                    elif (intersection.right):
+                        ghost.moving_right = True
+            elif(intersection.left or intersection.right):
+                if ((pacman.rect.x <= ghost.rect.x and abs(pacman.rect.x - ghost.rect.x) > 3) and intersection.left):
+                    ghost.moving_left = True
+                elif ((pacman.rect.x >= ghost.rect.x and abs(pacman.rect.x - ghost.rect.x) > 3) and intersection.right):
+                    ghost.moving_right = True
+                elif (intersection.up or intersection.down):
+                    if (intersection.up):
+                        ghost.moving_up = True
+                    elif (intersection.down):
+                        ghost.moving_down = True
+            ghost.last_intersection = intersection.number
+
+        elif ((abs(pacman.rect.x - ghost.rect.x) >= abs(pacman.rect.y - ghost.rect.y))
+        and not ghost.last_intersection == intersection.number):
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (intersection.left or intersection.right):
+                if ((pacman.rect.x <= ghost.rect.x and abs(pacman.rect.x - ghost.rect.x) > 3) and intersection.left):
+                    ghost.moving_left = True
+                elif ((pacman.rect.x >= ghost.rect.x and abs(pacman.rect.x - ghost.rect.x) > 3) and intersection.right):
+                    ghost.moving_right = True
+                elif (intersection.up or intersection.down):
+                    if (intersection.up):
+                        ghost.moving_up = True
+                    elif (intersection.down):
+                        ghost.moving_down = True
+            elif (intersection.up or intersection.down):
+                if ((pacman.rect.y <= ghost.rect.y and abs(pacman.rect.y - ghost.rect.y) > 3) and intersection.up):
+                    ghost.moving_up = True
+                elif ((pacman.rect.y >= ghost.rect.y and abs(pacman.rect.y - ghost.rect.y) > 3) and intersection.down):
+                    ghost.moving_down = True
+                elif (intersection.left or intersection.right):
+                    if (intersection.left):
+                        ghost.moving_left = True
+                    elif (intersection.right):
+                        ghost.moving_right = True
+            ghost.last_intersection = intersection.number

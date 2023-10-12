@@ -1,12 +1,14 @@
 import pygame
-from pygame.sprite import Sprite
+from pygame.sprite import Sprite, Group
 
 
-class Intersections(Sprite):
-    def __init__(self, screen, number):
-        super(Intersections, self).__init__()
+class Intersection(Sprite):
+    def __init__(self, screen, number, x, y):
+        super(Intersection, self).__init__()
         self.screen = screen
         self.rect = pygame.Rect(0, 0, 1, 1)
+        self.rect.x = x
+        self.rect.y = y
         self.color = ((0, 0, 0))
         self.number = number
 
@@ -35,3 +37,17 @@ class Intersections(Sprite):
 
     def blit(self):
         pygame.draw.rect(self.screen, self.color, self.rect)
+
+
+class Intersections:
+    def __init__(self, screen):
+        self.screen = screen
+        self.intersections = Group()
+
+    def create_intersection(self, x, y, number):
+        intersection = Intersection(screen=self.screen, x=x, y=y, number=number)
+        self.intersections.add(intersection)
+
+    def draw(self):
+        for intersect in self.intersections:
+            intersect.blit()

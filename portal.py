@@ -74,10 +74,56 @@ class Portals:
     def __init__(self, screen):
         self.screen = screen
         self.portals = Group()
+        self.create_orange_portal()
+        self.create_blue_portal()
 
-    def add_portal(self, portal):
-        self.portals.add(portal)
+    def create_orange_portal(self):
+        self.orange = Portal(self.screen, "orange", -1, -1) # portal offscreen
+        self.portals.add(self.orange)
+
+    def create_blue_portal(self):
+        self.blue = Portal(self.screen, "blue", -1, -1) # portal offscreen
+        self.portals.add(self.blue)
 
     def draw(self):
         for portal in self.portals:
             portal.blitportal()
+
+    def update(self):
+        for portal in self.portals:
+            if (portal.rect.x > -1 and portal.rect.y > -1):
+                self.draw()
+
+    def close_portal(self, color):
+        if color == 'blue':
+            self.blue.rect.x = -1
+            self.blue.rect.y = -1
+        else:
+            self.orange.rect.x = -1
+            self.orange.rect.y = -1
+            
+    def place_portal_orange(self, pacman):
+        orange = self.orange
+        if(pacman.last_direction == 'left'):
+            orange.rect.x, orange.rect.y = pacman.rect.x - 14, pacman.rect.y
+        elif (pacman.last_direction == 'right'):
+            orange.rect.x, orange.rect.y = pacman.rect.x + 34.5, pacman.rect.y
+        elif (pacman.last_direction == 'up'):
+            orange.rect.x, orange.rect.y = pacman.rect.x, pacman.rect.y - 14
+        elif (pacman.last_direction == 'down'):
+            orange.rect.x, orange.rect.y = pacman.rect.x, pacman.rect.y + 34.5
+        orange.rotate(pacman.last_direction)
+        orange.portal_placed = True
+        
+    def place_portal_blue(self, pacman):
+        blue = self.portals.blue
+        if (pacman.last_direction == 'left'):
+            blue.rect.x, blue.rect.y = pacman.rect.x - 14, pacman.rect.y
+        elif (pacman.last_direction == 'right'):
+            blue.rect.x, blue.rect.y = pacman.rect.x + 34.5, pacman.rect.y
+        elif (pacman.last_direction == 'up'):
+            blue.rect.x, blue.rect.y = pacman.rect.x, pacman.rect.y - 14
+        elif (pacman.last_direction == 'down'):
+            blue.rect.x, blue.rect.y = pacman.rect.x, pacman.rect.y + 34.5
+        blue.rotate(pacman.last_direction)
+        blue.portal_placed = True
