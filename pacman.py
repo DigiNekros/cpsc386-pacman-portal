@@ -9,8 +9,8 @@ class Pacman():
         self.game = game
         self.blocks = game.blocks.blocks
         self.shields = game.shield.shields
-        self.powerpills = game.powerpills
-        self.ghosts = game.ghosts
+        self.powerpills = game.powerpills.powerpills
+        self.ghosts = game.ghosts.ghosts
         self.fruit = game.fruit
         self.portals = game.portals
         self.height = 35
@@ -210,21 +210,21 @@ class Pacman():
             if pygame.sprite.collide_rect(self, shield):
                 self.check_shield_direction(shield)
         
-        if pygame.sprite.spritecollide(self, self.powerpills.powerpills, False):
+        if pygame.sprite.spritecollide(self, self.powerpills, False):
             for powerpill in self.powerpills:
                 if (pygame.sprite.collide_rect(self, powerpill)):
                     for ghost in self.ghosts:
                         if(ghost.color == 'red'):
                             ghost.speed += .001  # speed up Blinky's (red ghost) speed for every pellet eaten
                     self.powerpills.remove(powerpill)
-                if(powerpill.size == 'big'):
-                    for ghost in self.ghosts:
-                        ghost.afraid = True
-                        ghost.frames = 0 # reset the afraid timer
-                    self.game.showgamestats.score += 50
-                else:
-                    self.game.showgamestats.score += 10
-                    self.playPelletEatSound()
+                    if(powerpill.size == 'big'):
+                        for ghost in self.ghosts:
+                            ghost.afraid = True
+                            ghost.frames = 0 # reset the afraid timer
+                        self.game.showgamestats.score += 50
+                    else:
+                        self.game.showgamestats.score += 10
+                        self.playPelletEatSound()
                     
         if pygame.sprite.collide_rect(self, self.fruit):
             if(not self.fruit.destroyed):
@@ -232,7 +232,7 @@ class Pacman():
                 self.fruit.destroyed = True
                 self.playFruitEatenSound()
                 
-        if (pygame.sprite.spritecollide(self, self.ghosts.ghosts, False)):
+        if (pygame.sprite.spritecollide(self, self.ghosts, False)):
             for ghost in self.ghosts:
                 if (pygame.sprite.collide_rect(self, ghost)):
                     if(ghost.afraid and not ghost.DEAD):
@@ -265,7 +265,7 @@ class Pacman():
                     self.rect.x, self.rect.y = blue.rect.x, blue.rect.y - 40
                 elif (blue.output == 'down'):
                     self.rect.x, self.rect.y = blue.rect.x, blue.rect.y + 40
-                pygame.time.wait(0.05) # wait so can notice change
+                pygame.time.wait(1000) # wait so can notice change
                 self.portals.close_portal(color='blue')
 
 
@@ -282,5 +282,5 @@ class Pacman():
                 elif (orange.output == 'down'):
                     self.rect.x, self.rect.y = orange.rect.x, orange.rect.y + 40
                 self.portals.remove(orange)
-                pygame.time.wait(0.5) # wait so can notice change
+                pygame.time.wait(1000) # wait so can notice change
                 self.portals.close_portal(color='orange')

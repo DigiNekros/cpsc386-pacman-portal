@@ -226,7 +226,7 @@ class Ghosts:
                 ghost.speed += 1
 
     # Check direction ghost is going to compare and see if they can't go a direction anymore if they hit a block
-    def check_direction(ghost, block):
+    def check_direction(self, ghost, block):
         left = False
         right = False
         up = False
@@ -252,14 +252,14 @@ class Ghosts:
     # Ghosts collision handling
     def check_collision(self):
         for block in self.blocks:
-            for ghost in self.ghosts:
-                if (pygame.sprite.collide_rect(ghost, block)):
-                    self.check_direction(ghost=ghost, block=block)
+            for singleghost in self.ghosts:
+                if (pygame.sprite.collide_rect(singleghost, block)):
+                    self.check_direction(singleghost, block)
 
         for intersection in self.intersections:
-            for ghost in self.ghosts:
-                if(pygame.sprite.collide_rect(ghost, intersection)):
-                    self.ghost_intersection_behavior(ghost, self.pacman, intersection)
+            for singleghost in self.ghosts:
+                if(pygame.sprite.collide_rect(singleghost, intersection)):
+                    self.ghost_intersection_behavior(singleghost, self.pacman, intersection)
 
         if(self.game.showgamestats.level > 4): # if player beyond level 4, ghosts can enter and exit portals too
             for ghost in self.ghosts:

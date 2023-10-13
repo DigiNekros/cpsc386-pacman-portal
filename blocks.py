@@ -33,23 +33,3 @@ class Maze:
     def draw(self):
         for block in self.blocks:
             block.blitblocks()
-
-    def change_color(self):
-        if(self.frames <= 120):
-            for block in self.blocks:
-                block.color = ((255,255,255))
-            self.draw()
-        elif(self.frames <= 240):
-            for block in self.blocks:
-                block.color = ((0,0,255))
-            self.draw()
-        elif (self.frames <= 360):
-            for block in self.blocks:
-                block.color = ((255, 255, 255))
-            self.draw()
-        elif (self.frames <= 480):
-            for block in self.blocks:
-                block.color = ((0, 0, 255))
-            self.draw()
-        else:
-            self.game.next_level()

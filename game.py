@@ -86,13 +86,17 @@ class Game:
         return 'Game(Pacman Portal), maze=' + str(self.maze) + ')'
     
     def check_start(self):
-        if not self.gamesettings.game_active:
+        if not self.gamesettings.game_active and not self.gamesettings.victory_fanfare and not self.thepacman.DEAD:
             self.startScreen.makeScreen(self.screen, self.gamesettings, self)
 
     def check_win(self):
         if (len(self.powerpills.powerpills) == 0):
                 self.gamesettings.game_active = False
                 self.gamesettings.victory_fanfare = True
+                # self.blocks.change_color()
+                # # self.frames += 1
+                # self.next_level()
+                # self.frames += 1
 
     def check_if_play_intro_sound(self):
         if (self.playIntro and pygame.time.get_ticks() % 200 <= 50):
@@ -111,7 +115,7 @@ class Game:
         self.reset()
         self.showgamestats.level += 1
         self.fruit.fruitReset()
-        gf.readFile(self.screen, self.blocks, self.shield, self.powerpills, self.intersections)
+        gf.readFile(self.blocks, self.shield, self.powerpills, self.intersections)
         self.frames = 0
         pygame.time.wait(1000)
 
@@ -137,6 +141,8 @@ class Game:
             self.game_over()
 
     def reset_level(self):
+        self.gamesettings.game_active = True
+        self.gamesettings.victory_fanfare = False
         self.thepacman.deathAnimation(self.frames)
         self.frames += 1
         if(self.frames > 600):
@@ -170,10 +176,27 @@ class Game:
                 self.fruit.blitfruit()
                 self.thepacman.update()
                 self.check_win()
-                self.check_if_play_intro_sound()
-                
+                self.check_if_play_intro_sound()  
             elif(self.gamesettings.victory_fanfare):
-                self.blocks.change_color()
+                if(self.frames <= 120):
+                    for block in self.blocks.blocks:
+                        block.color = ((255,255,255))
+                        block.blitblocks()
+                elif(self.frames <= 240):
+                    for block in self.blocks.blocks:
+                        block.color = ((0,0,255))
+                        block.blitblocks()
+                elif (self.frames <= 360):
+                    for block in self.blocks.blocks:
+                        block.color = ((255, 255, 255))
+                        block.blitblocks()
+                elif (self.frames <= 480):
+                    for block in self.blocks.blocks:
+                        block.color = ((0, 0, 255))
+                        block.blitblocks()
+                else:
+                    self.next_level()
+                pygame.time.wait(5)
                 self.frames += 1
             elif(self.thepacman.DEAD):
                 self.reset_level()
