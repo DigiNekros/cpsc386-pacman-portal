@@ -1,5 +1,6 @@
 import pygame
 from pygame.sprite import Sprite, Group
+from button import Button
 
 
 class Blocks(Sprite):
@@ -25,11 +26,16 @@ class Maze:
         self.blocks = Group()
         self.game = game
         self.frames = game.frames
+        self.ready_button = Button(self.screen, "Ready!")
+        self.times_drawn = 0
 
     def create_block(self, x, y):
         block = Blocks(screen=self.screen, x=x, y=y)
         self.blocks.add(block)
 
     def draw(self):
+        self.times_drawn += 1
         for block in self.blocks:
             block.blitblocks()
+        if self.times_drawn <= 10:
+            self.ready_button.draw_button()

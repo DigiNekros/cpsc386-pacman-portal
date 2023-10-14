@@ -13,3 +13,4 @@ class Settings():
         self.game_active = False
 
         self.victory_fanfare = False
+        # self.show_ready = False

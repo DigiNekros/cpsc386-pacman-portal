@@ -9,10 +9,16 @@ class Button():
         self.screen_rect = screen.get_rect()
 
         # Set the dimensions and properties of the button.
-        self.width, self.height = 200, 50
+        if (msg == "Ready!"):
+            self.width, self.height = 100, 25
+        else:
+            self.width, self.height = 200, 50
         self.button_color = (0, 0, 0, 0)
         self.text_color = (255, 255, 255)
-        self.font = pygame.font.SysFont(None, 48)
+        if (msg == "Ready!"):
+            self.font = pygame.font.SysFont(None, 25)
+        else:
+            self.font = pygame.font.SysFont(None, 48)
 
         # Build the button's rect object, and center it.
         self.rect = pygame.Rect(0, 0, self.width, self.height)
@@ -20,6 +26,10 @@ class Button():
         self.rect.y = 360
         if(msg == "High Scores"):
             self.rect.y = 420
+        if (msg == "Ready!"):
+            self.rect.center = self.screen_rect.center
+            self.rect.y += 35
+            self.rect.x -= 80
 
         # The button message only needs to be prepped once.
         self.prep_msg(msg)

@@ -141,8 +141,6 @@ class Game:
             self.game_over()
 
     def reset_level(self):
-        self.gamesettings.game_active = True
-        self.gamesettings.victory_fanfare = False
         self.thepacman.deathAnimation(self.frames)
         self.frames += 1
         if(self.frames > 600):
@@ -196,7 +194,6 @@ class Game:
                         block.blitblocks()
                 else:
                     self.next_level()
-                pygame.time.wait(5)
                 self.frames += 1
             elif(self.thepacman.DEAD):
                 self.reset_level()
