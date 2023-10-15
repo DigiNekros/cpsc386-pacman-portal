@@ -7,6 +7,10 @@ from pygame import mixer
 import SpriteSheet
 from random import randint
 
+up = [30, 32, 35, 36, 39, 42, 45, 47, 49, 50, 52, 54, 57, 58, 61, 62, 65, 66, 67, 68]
+down = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 16, 18, 19, 21, 25]
+right = [15, 17, 23, 24, 28, 29, 37, 38, 41, 53, 55, 56, 60]
+left = [10, 11, 20, 22, 26, 27, 33, 34, 40, 43, 44, 46, 48, 51, 59, 63, 64]
 
 class Ghost(Sprite):
     def __init__(self, screen, color):
@@ -251,12 +255,49 @@ class Ghosts:
         elif down:
             ghost.rect.y += 1
 
+    def stuck(self, ghost):
+        collision = False
+        for block in self.blocks:
+                if pygame.sprite.collide_rect(ghost, block):
+                    collision = True
+                    self.check_direction(ghost, block)
+                    break
+
+        return collision
+
+
+    def go_home(self, ghost, intersection):
+        if intersection.number in up:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_down = False
+            ghost.moving_up = True
+        if intersection.number in down:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_down = True
+            ghost.moving_up = False
+        if intersection.number in left:
+            ghost.moving_left = True
+            ghost.moving_right = False
+            ghost.moving_down = False
+            ghost.moving_up = False
+        if intersection.number in right:
+            ghost.moving_left = False
+            ghost.moving_right = True
+            ghost.moving_down = False
+            ghost.moving_up = False
+
     # Ghosts collision handling
     def check_collision(self):
         for block in self.blocks:
             for singleghost in self.ghosts:
                 if (pygame.sprite.collide_rect(singleghost, block)):
                     self.check_direction(singleghost, block)
+
+        for intersection in self.intersections:
+            if intersection.number == 24:
+                self.h_rect = intersection.rect
 
         for intersection in self.intersections:
             for singleghost in self.ghosts:
@@ -326,7 +367,7 @@ class Ghosts:
             else:
                 ghost.moving_left = True
 
-        # intersection 31 is the one in the box
+        # intersection 30 is the one in the box
         elif(intersection.number == 31):
             ghost.moving_left = False
             ghost.moving_right = False
@@ -338,61 +379,8 @@ class Ghosts:
 
         # x,y = 351, 234 is the location of intersection number 25, the entrance of the box
         elif(ghost.DEAD):
-            if ((abs(351 - ghost.rect.x) <= abs(234 - ghost.rect.y)) 
-                and not ghost.last_intersection == intersection.number):
-                ghost.moving_left = False
-                ghost.moving_right = False
-                ghost.moving_up = False
-                ghost.moving_down = False
-                if (intersection.up or intersection.down):
-                    if ((234 <= ghost.rect.y and abs(234 - ghost.rect.y) > 3) and intersection.up):
-                        ghost.moving_up = True
-                    elif ((234 >= ghost.rect.y and abs(234 - ghost.rect.y) > 3) and intersection.down):
-                        ghost.moving_down = True
-                    elif (intersection.left or intersection.right):
-                        if (intersection.left):
-                            ghost.moving_left = True
-                        elif (intersection.right):
-                            ghost.moving_right = True
-                elif (intersection.left or intersection.right):
-                    if ((351 <= ghost.rect.x and abs(351 - ghost.rect.x) > 3) and intersection.left):
-                        ghost.moving_left = True
-                    elif ((351 >= ghost.rect.x and abs(351 - ghost.rect.x) > 3) and intersection.right):
-                        ghost.moving_right = True
-                    elif (intersection.up or intersection.down):
-                        if (intersection.up):
-                            ghost.moving_up = True
-                        elif (intersection.down):
-                            ghost.moving_down = True
-                ghost.last_intersection = intersection.number
-
-            elif ((abs(351 - ghost.rect.x) >= (234 - ghost.rect.y)) 
-                  and not ghost.last_intersection == intersection.number):
-                ghost.moving_left = False
-                ghost.moving_right = False
-                ghost.moving_up = False
-                ghost.moving_down = False
-                if (intersection.left or intersection.right):
-                    if ((351 <= ghost.rect.x and abs(351 - ghost.rect.x) > 3) and intersection.left):
-                        ghost.moving_left = True
-                    elif ((351 >= ghost.rect.x and abs(351 - ghost.rect.x) > 3) and intersection.right):
-                        ghost.moving_right = True
-                    elif (intersection.up or intersection.down):
-                        if (intersection.up):
-                            ghost.moving_up = True
-                        elif (intersection.down):
-                            ghost.moving_down = True
-                elif (intersection.up or intersection.down):
-                    if ((234 <= ghost.rect.y and abs(234 - ghost.rect.y) > 3) and intersection.up):
-                        ghost.moving_up = True
-                    elif ((234 >= ghost.rect.y and abs(234 - ghost.rect.y) > 3) and intersection.down):
-                        ghost.moving_down = True
-                    elif (intersection.left or intersection.right):
-                        if (intersection.left):
-                            ghost.moving_left = True
-                        elif (intersection.right):
-                            ghost.moving_right = True
-                ghost.last_intersection = intersection.number
+            self.go_home(ghost, intersection)
+            ghost.last_intersection = intersection.number
 
         elif(ghost.afraid): #if afraid, run from pacman
             ghost.moving_left = False
