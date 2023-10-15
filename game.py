@@ -37,7 +37,7 @@ class Game:
         # self.powerpills = Group()
         # self.shield = Group()
         self.shield = Shields(screen=self.screen)
-        self.portals = Portals(screen=self.screen)
+        self.portals = Portals(game=self)
         # self.portals = Group()
         self.intersections = Intersections(screen=self.screen)
         self.ghosts = Ghosts(game=self)
@@ -109,6 +109,7 @@ class Game:
         self.gamesettings.victory_fanfare = False
         self.thepacman.resetPosition()
         self.ghosts.reset()
+        self.portals.reset()
         self.ghosts.change_speed() # changes speed to += 1
     
     def next_level(self):
@@ -132,8 +133,10 @@ class Game:
         self.showgamestats.score = 0
         self.showgamestats.level = 1
         self.fruit.fruitReset()
+        self.portals.reset()
         self.playIntro = True # reset the chime
-        # gf.readFile(self.screen, self.blocks, self.shield, self.powerpills, self.intersections)
+        self.blocks.times_drawn = 0
+        gf.readFile(self.blocks, self.shield, self.powerpills, self.intersections)
         self.startScreen.makeScreen(self.screen, self.gamesettings, self)
 
     def check_game_over(self):
@@ -148,6 +151,7 @@ class Game:
             self.thepacman.DEAD = False
             self.thepacman.resetPosition()
             self.ghosts.reset()
+            self.portals.reset()
             self.frames = 0
             pygame.time.wait(1000)
 
@@ -165,10 +169,11 @@ class Game:
                 # gf.check_collision(self.thepacman, self.blocks, self.powerpills, self.shield, self.ghosts, 
                 #                    self.intersections, self.showgamestats, self.gamesettings, self.fruit, 
                 #                    self.orange, self.blue)
+                self.powerpills.draw()
                 self.portals.update()
                 self.blocks.draw()
                 self.shield.draw()
-                self.powerpills.draw()
+                # self.powerpills.draw()
                 self.ghosts.update()
                 self.intersections.draw()
                 self.fruit.blitfruit()

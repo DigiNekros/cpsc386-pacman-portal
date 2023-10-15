@@ -242,7 +242,7 @@ class Pacman():
                             if(ghost.DEAD):
                                 pts += 1
                                 ghost.value = 100 * 2**pts
-                        self.showgamestats.score += 100 * 2**pts
+                        self.game.showgamestats.score += 100 * 2**pts
                         ghost.playDeathSound()
                         pygame.time.wait(500)
                     elif(not ghost.afraid and not ghost.DEAD):
@@ -268,7 +268,6 @@ class Pacman():
                 pygame.time.wait(1000) # wait so can notice change
                 self.portals.close_portal(color='blue')
 
-
         if(pygame.sprite.collide_rect(self, self.portals.blue)):
             orange = self.portals.orange
             if(orange.portal_placed):
@@ -281,6 +280,5 @@ class Pacman():
                     self.rect.x, self.rect.y = orange.rect.x, orange.rect.y - 40
                 elif (orange.output == 'down'):
                     self.rect.x, self.rect.y = orange.rect.x, orange.rect.y + 40
-                self.portals.remove(orange)
                 pygame.time.wait(1000) # wait so can notice change
                 self.portals.close_portal(color='orange')

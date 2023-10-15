@@ -71,18 +71,19 @@ class Portal(Sprite):
 
 
 class Portals:
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self, game):
+        self.screen = game.screen
         self.portals = Group()
+        self.blocks = game.blocks.blocks
         self.create_orange_portal()
         self.create_blue_portal()
 
     def create_orange_portal(self):
-        self.orange = Portal(self.screen, "orange", -1, -1) # portal offscreen
+        self.orange = Portal(self.screen, "orange", -100, -100) # portal offscreen
         self.portals.add(self.orange)
 
     def create_blue_portal(self):
-        self.blue = Portal(self.screen, "blue", -1, -1) # portal offscreen
+        self.blue = Portal(self.screen, "blue", -100, -100) # portal offscreen
         self.portals.add(self.blue)
 
     def draw(self):
@@ -91,16 +92,25 @@ class Portals:
 
     def update(self):
         for portal in self.portals:
-            if (portal.rect.x > -1 and portal.rect.y > -1):
+            if (portal.rect.x > 0 and portal.rect.y > 0):
                 self.draw()
 
     def close_portal(self, color):
         if color == 'blue':
-            self.blue.rect.x = -1
-            self.blue.rect.y = -1
+            self.blue.rect.x = -100
+            self.blue.rect.y = -100
+            self.blue.portal_placed = False
         else:
-            self.orange.rect.x = -1
-            self.orange.rect.y = -1
+            self.orange.rect.x = -100
+            self.orange.rect.y = -100
+            self.orange.portal_placed = False
+
+    def reset(self):
+        self.portals.empty()
+        self.close_portal('blue')
+        self.close_portal('orange')
+        self.portals.add(self.blue)
+        self.portals.add(self.orange)
             
     def place_portal_orange(self, pacman):
         orange = self.orange
@@ -112,11 +122,12 @@ class Portals:
             orange.rect.x, orange.rect.y = pacman.rect.x, pacman.rect.y - 14
         elif (pacman.last_direction == 'down'):
             orange.rect.x, orange.rect.y = pacman.rect.x, pacman.rect.y + 34.5
+        self.move_to_wall(pacman.last_direction, 'orange')
         orange.rotate(pacman.last_direction)
         orange.portal_placed = True
         
     def place_portal_blue(self, pacman):
-        blue = self.portals.blue
+        blue = self.blue
         if (pacman.last_direction == 'left'):
             blue.rect.x, blue.rect.y = pacman.rect.x - 14, pacman.rect.y
         elif (pacman.last_direction == 'right'):
@@ -125,5 +136,51 @@ class Portals:
             blue.rect.x, blue.rect.y = pacman.rect.x, pacman.rect.y - 14
         elif (pacman.last_direction == 'down'):
             blue.rect.x, blue.rect.y = pacman.rect.x, pacman.rect.y + 34.5
+        self.move_to_wall(pacman.last_direction, 'blue')
         blue.rotate(pacman.last_direction)
         blue.portal_placed = True
+        
+
+    def move_to_wall(self, direction, color):
+        collided = False
+        while not collided:
+            if color == 'blue':
+                if (direction == 'left'):
+                    self.blue.rect.x -= 1
+                    self.draw_single('blue')
+                elif (direction == 'right'):
+                    self.blue.rect.x += 1
+                    self.draw_single('blue')
+                elif (direction == 'up'):
+                    self.blue.rect.y -= 1
+                    self.draw_single('blue')
+                elif (direction == 'down'):
+                    self.blue.rect.y += 1
+                    self.draw_single('blue')
+                for block in self.blocks:
+                    if pygame.sprite.collide_rect(self.blue, block):
+                        collided = True
+                        break
+            elif color == 'orange':
+                if (direction == 'left'):
+                    self.orange.rect.x -= 1
+                    self.draw_single('orange')
+                elif (direction == 'right'):
+                    self.orange.rect.x += 1
+                    self.draw_single('orange')
+                elif (direction == 'up'):
+                    self.orange.rect.y -= 1
+                    self.draw_single('orange')
+                elif (direction == 'down'):
+                    self.orange.rect.y += 1
+                    self.draw_single('orange')
+                for block in self.blocks:
+                    if pygame.sprite.collide_rect(self.orange, block):
+                        collided = True
+                        break
+    
+    def draw_single(self, color):
+        if color == 'blue':
+            self.blue.blitportal()
+        elif color == 'orange':
+            self.orange.blitportal()

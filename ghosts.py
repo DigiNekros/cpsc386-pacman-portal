@@ -277,7 +277,7 @@ class Ghosts:
                             ghost.rect.x, ghost.rect.y = blue.rect.x, blue.rect.y - 40
                         elif (blue.output == 'down'):
                             ghost.rect.x, ghost.rect.y = blue.rect.x, blue.rect.y + 40
-                        pygame.time.wait(0.5) # wait so can notice the change
+                        pygame.time.wait(1000) # wait so can notice the change
                         self.portals.close_portal(color='blue') # close the blue portal
                 
                 if (pygame.sprite.collide_rect(ghost, blue)):
@@ -291,7 +291,7 @@ class Ghosts:
                             ghost.rect.x, ghost.rect.y = orange.rect.x, orange.rect.y - 40
                         elif (orange.output == 'down'):
                             ghost.rect.x, ghost.rect.y = orange.rect.x, orange.rect.y + 40
-                        pygame.time.wait(0.5) # wait so can notice the change
+                        pygame.time.wait(1000) # wait so can notice the change
                         self.portals.close_portal(color='orange') # close the orange portal
 
     #Ghost AI.
