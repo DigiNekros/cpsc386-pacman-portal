@@ -7,9 +7,13 @@ from pygame import mixer
 import SpriteSheet
 from random import randint
 
-up = [30, 32, 35, 36, 39, 42, 45, 47, 49, 50, 52, 54, 57, 58, 61, 62, 65, 66, 67, 68]
-down = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 16, 18, 19, 21, 25]
-right = [15, 17, 23, 24, 28, 29, 37, 38, 41, 53, 55, 56, 60]
+# up = [30, 32, 35, 36, 39, 42, 45, 47, 49, 50, 52, 54, 57, 58, 61, 62, 65, 66, 67, 68]
+# down = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 16, 18, 19, 21, 25]
+# right = [15, 17, 23, 24, 28, 29, 37, 38, 41, 53, 55, 56, 60]
+# left = [10, 11, 20, 22, 26, 27, 33, 34, 40, 43, 44, 46, 48, 51, 59, 63, 64]
+up = [32, 36, 39, 42, 45, 47, 49, 50, 52, 54, 57, 58, 61, 62, 65, 66, 67, 68]
+down = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 16, 18, 19, 21, 25, 29, 30]
+right = [15, 17, 23, 24, 28, 35, 37, 38, 41, 53, 55, 56, 60]
 left = [10, 11, 20, 22, 26, 27, 33, 34, 40, 43, 44, 46, 48, 51, 59, 63, 64]
 
 class Ghost(Sprite):
@@ -294,10 +298,6 @@ class Ghosts:
             for singleghost in self.ghosts:
                 if (pygame.sprite.collide_rect(singleghost, block)):
                     self.check_direction(singleghost, block)
-
-        for intersection in self.intersections:
-            if intersection.number == 24:
-                self.h_rect = intersection.rect
 
         for intersection in self.intersections:
             for singleghost in self.ghosts:
