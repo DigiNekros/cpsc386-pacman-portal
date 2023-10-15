@@ -296,13 +296,13 @@ class Ghosts:
 
     #Ghost AI.
     def ghost_intersection_behavior(self, ghost, pacman, intersection):
-        # special code for intersection 24
-        if(ghost.DEAD and intersection.number == 24):
+        # special code for intersection 25
+        if(ghost.DEAD and intersection.number == 25):
             ghost.moving_left = False
             ghost.moving_right = False
             ghost.moving_up = False
             ghost.moving_down = True
-        elif(not ghost.DEAD and intersection.number == 24 and not ghost.last_intersection == intersection.number):
+        elif(not ghost.DEAD and intersection.number == 25 and not ghost.last_intersection == intersection.number):
             ghost.moving_left = False
             ghost.moving_right = False
             ghost.moving_up = False
@@ -315,8 +315,8 @@ class Ghosts:
                 ghost.moving_left = True
             ghost.last_intersection = intersection.number
 
-        # intersection 30 is the one in the box
-        elif(intersection.number == 30):
+        # intersection 31 is the one in the box
+        elif(intersection.number == 31):
             ghost.moving_left = False
             ghost.moving_right = False
             ghost.moving_up = True
@@ -325,7 +325,7 @@ class Ghosts:
             ghost.DEAD = False
             ghost.afraid = False
 
-        # x,y = 351, 234 is the location of intersection number 24, the entrance of the box
+        # x,y = 351, 234 is the location of intersection number 25, the entrance of the box
         elif(ghost.DEAD):
             if ((abs(351 - ghost.rect.x) <= abs(234 - ghost.rect.y))
                 and not ghost.last_intersection == intersection.number):
