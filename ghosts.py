@@ -315,6 +315,15 @@ class Ghosts:
                 ghost.moving_left = True
             ghost.last_intersection = intersection.number
 
+        if(not ghost.DEAD and intersection.number == 23 or ghost.last_intersection == 23 and intersection.left):
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            if (pacman.rect.y <= ghost.rect.y):
+                ghost.moving_down = True
+            else:
+                ghost.moving_left = True
+
         # intersection 31 is the one in the box
         elif(intersection.number == 31):
             ghost.moving_left = False
@@ -327,7 +336,7 @@ class Ghosts:
 
         # x,y = 351, 234 is the location of intersection number 25, the entrance of the box
         elif(ghost.DEAD):
-            if ((abs(351 - ghost.rect.x) <= abs(234 - ghost.rect.y))
+            if ((abs(351 - ghost.rect.x) <= abs(234 - ghost.rect.y)) 
                 and not ghost.last_intersection == intersection.number):
                 ghost.moving_left = False
                 ghost.moving_right = False
@@ -355,8 +364,8 @@ class Ghosts:
                             ghost.moving_down = True
                 ghost.last_intersection = intersection.number
 
-            elif ((abs(351 - ghost.rect.x) >= abs(234 - ghost.rect.y))
-              and not ghost.last_intersection == intersection.number):
+            elif ((abs(351 - ghost.rect.x) >= (234 - ghost.rect.y)) 
+                  and not ghost.last_intersection == intersection.number):
                 ghost.moving_left = False
                 ghost.moving_right = False
                 ghost.moving_up = False
@@ -417,8 +426,8 @@ class Ghosts:
                     break
             ghost.last_intersection = intersection.number
 
-        elif((abs(pacman.rect.x - ghost.rect.x) <= abs(pacman.rect.y - ghost.rect.y))
-            and not ghost.last_intersection == intersection.number):
+        elif((abs(pacman.rect.x - ghost.rect.x) <= abs(pacman.rect.y - ghost.rect.y)) 
+             and not ghost.last_intersection == intersection.number):
             ghost.moving_left = False
             ghost.moving_right = False
             ghost.moving_up = False
@@ -446,7 +455,7 @@ class Ghosts:
             ghost.last_intersection = intersection.number
 
         elif ((abs(pacman.rect.x - ghost.rect.x) >= abs(pacman.rect.y - ghost.rect.y))
-        and not ghost.last_intersection == intersection.number):
+              and not ghost.last_intersection == intersection.number):
             ghost.moving_left = False
             ghost.moving_right = False
             ghost.moving_up = False
