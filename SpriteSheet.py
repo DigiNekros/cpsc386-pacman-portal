@@ -1,4 +1,6 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame
+
 
 class spritesheet(object):
     def __init__(self, filename):
@@ -7,6 +9,7 @@ class spritesheet(object):
         except:
             print('Unable to load spritesheet image:', filename)
             reraise: SystemExit
+
     # Load a specific image from a specific rectangle
     def image_at(self, rectangle, colorkey = None):
         "Loads image from x,y,x+offset,y+offset"
@@ -18,10 +21,12 @@ class spritesheet(object):
                 colorkey = image.get_at((0,0))
             image.set_colorkey(colorkey, pygame.RLEACCEL)
         return image
+    
     # Load a whole bunch of images and return them as a list
     def images_at(self, rects, colorkey = None):
         "Loads multiple images, supply a list of coordinates"
         return [self.image_at(rect, colorkey) for rect in rects]
+    
     # Load a whole strip of images
     def load_strip(self, rect, image_count, colorkey = None):
         "Loads a strip of images and returns them as a list"

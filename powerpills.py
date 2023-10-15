@@ -1,3 +1,4 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame
 from pygame.sprite import Sprite, Group
 
@@ -36,4 +37,3 @@ class PowerPills:
     def draw(self):
         for powerpill in self.powerpills:
             powerpill.blitpowerpills()
-

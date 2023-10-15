@@ -1,3 +1,4 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame
 from pygame.sprite import Sprite, Group
 from SpriteSheet import spritesheet
@@ -147,16 +148,12 @@ class Portals:
             if color == 'blue':
                 if (direction == 'left'):
                     self.blue.rect.x -= 1
-                    self.draw_single('blue')
                 elif (direction == 'right'):
                     self.blue.rect.x += 1
-                    self.draw_single('blue')
                 elif (direction == 'up'):
                     self.blue.rect.y -= 1
-                    self.draw_single('blue')
                 elif (direction == 'down'):
                     self.blue.rect.y += 1
-                    self.draw_single('blue')
                 for block in self.blocks:
                     if pygame.sprite.collide_rect(self.blue, block):
                         collided = True
@@ -164,23 +161,13 @@ class Portals:
             elif color == 'orange':
                 if (direction == 'left'):
                     self.orange.rect.x -= 1
-                    self.draw_single('orange')
                 elif (direction == 'right'):
                     self.orange.rect.x += 1
-                    self.draw_single('orange')
                 elif (direction == 'up'):
                     self.orange.rect.y -= 1
-                    self.draw_single('orange')
                 elif (direction == 'down'):
                     self.orange.rect.y += 1
-                    self.draw_single('orange')
                 for block in self.blocks:
                     if pygame.sprite.collide_rect(self.orange, block):
                         collided = True
                         break
-    
-    def draw_single(self, color):
-        if color == 'blue':
-            self.blue.blitportal()
-        elif color == 'orange':
-            self.orange.blitportal()

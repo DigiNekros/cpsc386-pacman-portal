@@ -1,12 +1,9 @@
-import sys
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame
 import pygame.font
 import SpriteSheet
 from pacman import Pacman
 from ghosts import Ghost
-
-from pygame.sprite import Group
-from settings import Settings
 from button import Button
 
 # Globals for ease
@@ -52,8 +49,7 @@ class StartScreen():
         screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         screen.fill(BLACK)
 
-    def makeScreen(self, screen, gamesettings, game):
-
+    def makeScreen(self, screen, game):
         # create second set of characters for the title screen
         titlepacman = Pacman(game=game)
         titlepacman.rect.x, titlepacman.rect.y = 0, 280
@@ -199,6 +195,5 @@ class StartScreen():
                 titleorangeghost.update()
                 titleredghost.update()
                 titlepinkghost.update()
-
 
             pygame.display.flip()

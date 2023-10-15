@@ -1,3 +1,4 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame
 from pygame.sprite import Sprite
 from pygame.sysfont import SysFont
@@ -5,8 +6,9 @@ from pygame import mixer
 import SpriteSheet
 import random
 
+
 class Fruit(Sprite):
-    def __init__(self, screen):
+    def __init__(self, screen, type=5):
         super(Fruit, self).__init__()
         self.screen = screen
         ss = SpriteSheet.spritesheet('images/Fruits.png')
@@ -16,7 +18,10 @@ class Fruit(Sprite):
                        ss.image_at((96,0,32,32)),
                        ss.image_at((128,0,32,32))]
         self.values = [100, 300, 500, 700, 1000]
-        index = random.randint(0,4)
+        if type == 5:
+            index = random.randint(0,4)
+        else:
+            index = type
         img, self.value = self.fruits[index], self.values[index]
         img = pygame.transform.scale(img, (25, 25))
         self.rect = img.get_rect()

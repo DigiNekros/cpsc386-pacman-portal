@@ -1,6 +1,6 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame
 from pygame.sprite import Sprite, Group
-
 
 
 class Shield(Sprite):
@@ -19,6 +19,7 @@ class Shield(Sprite):
     def blitshield(self):
         self.screen.blit(self.image, self.rect)
 
+
 class Shields:
     def __init__(self, screen):
         self.screen = screen
@@ -31,4 +32,3 @@ class Shields:
     def draw(self):
         for shield in self.shields:
             shield.blitshield()
-

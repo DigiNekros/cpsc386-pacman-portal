@@ -1,7 +1,10 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame
 import pygame.font
 import SpriteSheet
 import json
+from pygame.sprite import Group
+from fruit import Fruit
 
 WHITE = (255, 255, 255)
 
@@ -53,6 +56,9 @@ class GameStats():
         # Number of lives
         self.num_lives = 3
 
+        # The current level
+        self.level = 1
+
         """Read the saved high score from the json file on disk (if it exists)"""
         try:
             with open('high_scores.json', 'r') as file:
@@ -61,6 +67,18 @@ class GameStats():
         except (FileNotFoundError, ValueError, EOFError, json.JSONDecodeError, AttributeError, IndexError) as e:
             print(e)
             self.high_scores_all = [0, 0, 0]  # Some issue with the file, going to default
+
+    def prep_level(self):
+        self.fruits = Group()
+        for fruit_num in range(self.level):
+            fruit = Fruit(self.screen, type=0)
+            fruit.rect.x, fruit.rect.y = self.scorespos
+            fruit.rect.x += 70
+            if fruit_num == 0:
+                fruit.rect.y += 140
+            else:
+                fruit.rect.y = fruit.rect.y + 140 + fruit_num * fruit.rect.height
+            self.fruits.add(fruit)
 
     def blitstats(self):
         self.screen.blit(self.Livestext, self.Livespos)
@@ -76,11 +94,13 @@ class GameStats():
         self.screen.blit(self.scores, self.scorespos)
         self.screen.blit(self.number, self.numberpos)
 
-        # Update scoreboard
+        self.prep_level()
+
+        for fruit in self.fruits:
+            self.screen.blit(fruit.image, fruit.rect)
+
         font = pygame.font.Font(None, 72)
         self.number = font.render(str(self.score), 2, WHITE)
-
-        self.level = 1
 
     def save_hs_to_file(self):
         """Save the high score to a json file on disk"""

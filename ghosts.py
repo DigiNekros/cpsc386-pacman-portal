@@ -1,3 +1,4 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame
 from pygame.sprite import Group
 from pygame.sprite import Sprite
@@ -5,6 +6,7 @@ from pygame.sysfont import SysFont
 from pygame import mixer
 import SpriteSheet
 from random import randint
+
 
 class Ghost(Sprite):
     def __init__(self, screen, color):

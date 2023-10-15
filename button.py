@@ -1,3 +1,4 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame.font
 
 
@@ -30,8 +31,6 @@ class Button():
             self.rect.center = self.screen_rect.center
             self.rect.y += 35
             self.rect.x -= 80
-            # self.rect.x -= 70
-            # self.rect.y -= 100
 
         # The button message only needs to be prepped once.
         self.prep_msg(msg)

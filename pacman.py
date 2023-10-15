@@ -1,6 +1,8 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
 import pygame
 from pygame import mixer
 import SpriteSheet
+
 
 class Pacman():
     def __init__(self, game):
@@ -44,7 +46,6 @@ class Pacman():
         self.image[1] = pygame.transform.scale(self.image[1], (self.height, self.width))
         self.image[2] = pygame.transform.scale(self.image[2], (self.height, self.width))
         self.rect = self.image[0].get_rect()
-        #self.rect.x, self.rect.y = 310, 515
         self.rect.left -= self.rect.width
         self.rect.top -= self.rect.height
 
@@ -85,22 +86,6 @@ class Pacman():
 
     # Updates pacman direction and sprite depending on direction
     def update(self):
-        # if self.moving_right:
-        #     self.rect.x += self.settings.pacmanspeed
-        #     self.image = self.right_image
-        #     self.last_direction = 'right'
-        # if self.moving_left:
-        #     self.rect.x -= self.settings.pacmanspeed
-        #     self.image = self.left_image
-        #     self.last_direction = 'left'
-        # if self.moving_up:
-        #     self.rect.y -= self.settings.pacmanspeed
-        #     self.image = self.up_image
-        #     self.last_direction = 'up'
-        # if self.moving_down:
-        #     self.rect.y += self.settings.pacmanspeed
-        #     self.image = self.down_image
-        #     self.last_direction = 'down'
         self.update_movement()
         self.check_collision()
         self.blitpacman()

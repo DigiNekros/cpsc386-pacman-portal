@@ -1,3 +1,5 @@
+# Anne Edwards, Miguel Mancera, Parker Nguyen
+
 class Settings():
     """A class to store all settings for Alien Invasion."""
 
@@ -13,4 +15,3 @@ class Settings():
         self.game_active = False
 
         self.victory_fanfare = False
-        # self.show_ready = False
