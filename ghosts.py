@@ -358,16 +358,27 @@ class Ghosts:
                 ghost.moving_left = True
             ghost.last_intersection = intersection.number
 
-        if(not ghost.DEAD and intersection.number == 23 or ghost.last_intersection == 23 and intersection.left):
+        if not ghost.DEAD and intersection.number == 23:
             ghost.moving_left = False
             ghost.moving_right = False
             ghost.moving_up = False
+            ghost.moving_down = False
             if (pacman.rect.y <= ghost.rect.y):
                 ghost.moving_down = True
             else:
                 ghost.moving_left = True
+        
+        if not ghost.DEAD and intersection.number == 26: # kept getting stuck
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y >= ghost.rect.y):
+                ghost.moving_left = True
+            else:
+                ghost.moving_up = True
 
-        # intersection 30 is the one in the box
+        # intersection 31 is the one in the box
         elif(intersection.number == 31):
             ghost.moving_left = False
             ghost.moving_right = False
@@ -416,6 +427,259 @@ class Ghosts:
                     break
             ghost.last_intersection = intersection.number
 
+            # change starting here
+        elif not ghost.DEAD and intersection.number == 1:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            if (pacman.rect.y > ghost.rect.y):
+                ghost.moving_down = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 3:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            if (pacman.rect.y > ghost.rect.y):
+                ghost.moving_down = True
+            else:
+                ghost.moving_right = True
+        elif not ghost.DEAD and intersection.number == 6:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y > ghost.rect.y):
+                ghost.moving_down = True
+            else:
+                ghost.moving_right = True
+        elif not ghost.DEAD and intersection.number == 15:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 17:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 18:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_left = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 19:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_right = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 20:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 22:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 37:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_right = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 40:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_right = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 41:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_left = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 44:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            # if (pacman.rect.y <= ghost.rect.y):
+            #     ghost.moving_right = True
+            # else:
+            ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 45:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 46:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_left = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 53:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_right = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 54:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 55:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_right = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 57:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 58:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_right = True
+        elif not ghost.DEAD and intersection.number == 59:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_left = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 60:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y <= ghost.rect.y):
+                ghost.moving_right = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 61:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 62:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_right = True
+        elif not ghost.DEAD and intersection.number == 64:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_left = True
+            else:
+                ghost.moving_down = True
+        elif not ghost.DEAD and intersection.number == 65:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_right = True
+        elif not ghost.DEAD and intersection.number == 68:
+            ghost.moving_left = False
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            if (pacman.rect.y < ghost.rect.y):
+                ghost.moving_up = True
+            else:
+                ghost.moving_left = True
+        elif not ghost.DEAD and intersection.number == 28:
+            ghost.moving_left = False
+            ghost.moving_right = True
+            ghost.moving_up = False
+            ghost.moving_down = False
+        elif not ghost.DEAD and intersection.number == 34:
+            ghost.moving_left = True
+            ghost.moving_right = False
+            ghost.moving_up = False
+            ghost.moving_down = False
+            # change ending here
         elif((abs(pacman.rect.x - ghost.rect.x) <= abs(pacman.rect.y - ghost.rect.y)) 
              and not ghost.last_intersection == intersection.number):
             ghost.moving_left = False
